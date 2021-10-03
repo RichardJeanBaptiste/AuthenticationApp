@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, json, request
 from pymongo import MongoClient
 from db_functions import *
 
@@ -22,6 +22,22 @@ def register():
     }
     register_new_user(x)
     return "Registered"
+
+@app.route("/login", methods=['GET','POST'])
+def login():
+    x = {
+        'email': request.form['email'],
+        'password': request.form['password']
+    }
+
+    if(find_user(x) == False):
+        return("Incorrect Username Or Password")
+    else:
+        #return "abc"
+        return json.loads(find_user(x))
+
+    
+    return find_user(x)
 
 if __name__ == "__main__":
     app.run()

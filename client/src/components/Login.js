@@ -77,7 +77,7 @@ export default function Login() {
 
                 }}>Login</Typography>
 
-                <form action="http://localhost:5000/register" method="POST">
+                <form action="http://localhost:5000/login" method="POST">
 
                 <TextField 
                   variant='outlined' 
