@@ -11,6 +11,7 @@ import { React } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
+import Profile from './components/Profile';
 
 
 
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route path="/login">
             <Login/>
+          </Route>
+          <Route path="/profile/:id">
+            <Profile/>
           </Route>
         </Switch>
       </Router>

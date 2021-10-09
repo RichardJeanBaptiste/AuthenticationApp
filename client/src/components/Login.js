@@ -1,14 +1,14 @@
-import {React, useState} from 'react';
+import {React, useState } from 'react';
 import Box from '@mui/material/Box';
-import { Typography,Card, Button, TextField } from '@mui/material';
+import { Typography,Card, Button, TextField, IconButton} from '@mui/material';
 import { useTheme }  from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import { GoogleLogin } from 'react-google-login';
+import { Link , useHistory } from 'react-router-dom';
 import DevLightIcon from './DevLightIcon';
 import InputAdornment from '@mui/material/InputAdornment';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import GoogleLink from '../assets/Google.svg';
-import FacebookLink from '../assets/Facebook.svg';
 import TwitterLink from '../assets/Twitter.svg';
 import GithubLink from '../assets/Gihub.svg';
 import '../App.css';
@@ -33,6 +33,8 @@ const useStyles = (theme) => ({
 
 
 
+
+
 export default function Login() {
   
   
@@ -41,6 +43,37 @@ export default function Login() {
 
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
+
+  const history = useHistory();
+
+  const responseGoogle = (response) => {
+    console.log("abcdedfas")
+    console.log(response);
+    console.log(response.profileObj);
+  }
+
+  const successLogin = (response) => {
+    
+     let googleLoginResponse = response.profileObj;
+     
+     fetch('/google-login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(googleLoginResponse)
+    })
+    .then((response) => response.text())
+    .then((data) => {
+      if(data === "Exists"){
+          history.push(`/profile/${googleLoginResponse.googleId}`)
+      }else{
+        alert(" account doesn't exist")
+        history.push("/")
+      }
+    })
+    
+  } 
   
 
   function handleEmailChange(e) {
@@ -77,7 +110,7 @@ export default function Login() {
 
                 }}>Login</Typography>
 
-                <form action="http://localhost:5000/login" method="POST">
+                <form action="/login" method="POST">
 
                 <TextField 
                   variant='outlined' 
@@ -129,10 +162,29 @@ export default function Login() {
                 }}>or continue with these social profiles</Typography>
 
                 <Box style={{ display: 'flex', flexDirection:'row', marginTop:'7%', marginLeft: '14%'}}>
-                    <img src={GoogleLink} alt="google icon" width='40px' height='40px'/>
-                    <img src={FacebookLink} alt="facebook icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
-                    <img src={TwitterLink} alt="twitter icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
-                    <img src={GithubLink} alt="github icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
+                  
+                    <GoogleLogin
+                          clientId="1097732373698-72rm00sovc1v5fhga05p9s2cc8tvbrru.apps.googleusercontent.com"
+                          render={renderProps => (
+                            <IconButton onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                              <img src={GoogleLink} alt="google icon" width='40px' height='40px'/>
+                            </IconButton>
+                          )}
+                          onSuccess={successLogin}
+                          onFailure={responseGoogle}
+                          cookiePolicy={'single_host_origin'}
+                    />
+
+                    <IconButton style={{ marginLeft:'4%'}}>
+                        <img src={TwitterLink} alt="twitter icon" width='40px' height='40px'/>
+                    </IconButton>
+
+                    <IconButton style={{ marginLeft:'4%'}}>
+                        <img src={GithubLink} alt="github icon" width='40px' height='40px'/>
+                    </IconButton>
+                    
+                    
+                    
                 </Box>
 
                 <Typography sx={{

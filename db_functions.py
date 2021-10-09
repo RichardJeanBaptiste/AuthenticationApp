@@ -1,11 +1,13 @@
 from pymongo import MongoClient
 from bson import json_util
-import pymongo
 
 
-client = MongoClient("mongodb+srv://Richinbk:RichinbkAuth123@users.mhqvf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-db = client.Users
-profiles = db.profiles
+try:
+    client = MongoClient("mongodb+srv://Richinbk:RichinbkAuth123@users.mhqvf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    db = client.Users
+    profiles = db.profiles
+except:
+    print("Failed to connect to database")
 
 
 def register_new_user(data):

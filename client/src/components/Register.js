@@ -1,8 +1,8 @@
 import {React, useState} from 'react';
 import Box from '@mui/material/Box';
-import { Link } from 'react-router-dom';
-import { Typography,Card, Button, TextField } from '@mui/material';
-import { useTheme }  from '@mui/material/styles';
+import { Link, useHistory } from 'react-router-dom';
+import { Typography,Card, Button, TextField, IconButton } from '@mui/material';
+import { GoogleLogin } from 'react-google-login';
 import DevLightIcon from './DevLightIcon';
 import InputAdornment from '@mui/material/InputAdornment';
 import EmailIcon from '@mui/icons-material/Email';
@@ -15,32 +15,13 @@ import '../App.css';
 
 
 
-const useStyles = (theme) => ({
-  root: {
-    position:'absolute',
-    top:'50%',
-    left:'50%',
-    transform:'translate(-50%, -50%)',
-  },
-  cardStyle: {
-    border: '1px solid #BDBDBD',
-    borderRadius: '24px',
-    height: '45em',
-    width: '30em',
-  }
-});
-
-
-
 
 export default function Register() {
-  
-  
-  const theme = useTheme();
-  const styles = useStyles(theme);
 
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
+
+  const history = useHistory();
   
 
   function handleEmailChange(e) {
@@ -50,6 +31,41 @@ export default function Register() {
   function handlePasswordChange(e) {
     setPassword(e.target.value)
   }
+
+
+  // Google login callback
+
+  const responseGoogle = (response) => {
+    console.log("abcdedfas")
+    console.log(response);
+    console.log(response.profileObj);
+  }
+
+  const successRegister = (response) => {
+    
+    let googleLoginResponse = response.profileObj;
+
+    fetch('/register_google', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(googleLoginResponse)
+    })
+    .then((response) => response.text())
+    .then((data) => {
+      if(data === 'User Created'){
+        alert('Signup Successful')
+        history.push(`/profile/${googleLoginResponse.googleId}`)
+      }else{
+        alert('User exists try logging in')
+        history.push('/login')
+      }
+    })
+
+  } 
+
+ 
 
   return (
     <>
@@ -93,7 +109,7 @@ export default function Register() {
                 }}
                 >{'Master web development by making real-life \nprojects. There are multiple paths for you to \nchoose'}</Typography>
 
-                <form action="http://localhost:5000/register" method="POST">
+                <form action="https://localhost:5000/register" method="POST">
 
                 <TextField 
                   variant='outlined' 
@@ -152,7 +168,17 @@ export default function Register() {
                     fontWeight: 'normal'
                 }}>or continue with these social profiles</Typography>
                 <Box style={{ display: 'flex', flexDirection:'row', marginTop:'7%', marginLeft: '14%'}}>
-                    <img src={GoogleLink} alt="google icon" width='40px' height='40px'/>
+                    <GoogleLogin
+                          clientId="1097732373698-72rm00sovc1v5fhga05p9s2cc8tvbrru.apps.googleusercontent.com"
+                          render={renderProps => (
+                            <IconButton onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                              <img src={GoogleLink} alt="google icon" width='40px' height='40px'/>
+                            </IconButton>
+                          )}
+                          onSuccess={successRegister}
+                          onFailure={responseGoogle}
+                          cookiePolicy={'single_host_origin'}
+                    />
                     <img src={FacebookLink} alt="facebook icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
                     <img src={TwitterLink} alt="twitter icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
                     <img src={GithubLink} alt="github icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
