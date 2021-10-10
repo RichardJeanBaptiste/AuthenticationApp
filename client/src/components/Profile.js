@@ -15,6 +15,7 @@ export default function Profile(){
             headers: {
               'Content-Type': 'application/json'
             },
+            // es-lint-disable-next-line
             body: JSON.stringify({loginId : id})
           })
           .then((response) => response.text())

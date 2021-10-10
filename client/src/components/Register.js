@@ -56,7 +56,7 @@ export default function Register() {
     .then((data) => {
       if(data === 'User Created'){
         alert('Signup Successful')
-        history.push(`/profile/${googleLoginResponse.googleId}`)
+        history.push('/login')
       }else{
         alert('User exists try logging in')
         history.push('/login')
