@@ -1,10 +1,12 @@
 from os import abort
+import random
 import os
-from flask import Flask, json, request, session
+from flask import Flask, json, request, session, redirect
 from flask_cors import CORS
 from flask_login import LoginManager, current_user, login_manager, login_required, login_user, logout_user
 from oauthlib.oauth2 import WebApplicationClient
 from pymongo import MongoClient
+from werkzeug.utils import redirect
 from db_functions import *
 from user import User
 
@@ -30,45 +32,20 @@ except:
     print("Failed to connect to database")
 
 
-'''
-def login_is_required(function):
-    def wrapper(*args, **kwargs):
-        if "google_id" not in sessions:
-            abort(401)
-        else:
-            return function()
-    return wrapper
-'''
-
-
 @app.route("/register", methods=["POST"])
 def register():
+
     x = {
+        'user_id': str(random.randrange(1, 10**10)),
         'email': request.form['email'],
         'password': request.form['password'],
-        'profile_pic': ''
+        'profile_pic': '', 
+        'data': json.dumps({})
     }
     if(User.create(x) == True):
-        return 'Registered'
+        return redirect('http://localhost:3000/login')
     else:
         return 'User Exists'
-
-@app.route("/register_google", methods=['POST'])
-def google_register():
-    
-    x = {
-        'email': request.json['email'],
-        'profile_pic': request.json['imageUrl'],
-        'google_id': request.json['googleId']
-    }
-    if(User.create(x) == True):
-        return "User Created"
-    else:
-        return 'User Exists'
-    
-@app.route("/profile")
-def profile():
-    return "Protected Route"
 
 @app.route("/login", methods=['GET','POST'])
 def login():
@@ -80,11 +57,30 @@ def login():
     if(User.get_from_db(x) == False):
         return("Incorrect Username Or Password")
     else:
-        return json.loads(find_user(x))
+        userId = User.get_from_db(x)
+        session['id'] = userId
+        return redirect("http://localhost:3000/profile/" + userId)
+
+@app.route("/register_google", methods=['POST'])
+def google_register():
+    
+    x = {
+        'user_id': request.json['googleId'],
+        'email': request.json['email'],
+        'profile_pic': request.json['imageUrl'],
+        'data': json.dumps({})
+        
+    }
+    if(User.create(x) == True):
+        return "User Created"
+    else:
+        return 'User Exists'
+    
 
 @app.route("/google-login", methods=["POST"])
 def google_login():
 
+    
     x = {
         'email': request.json['email'],
         'google_id': request.json['googleId'] 
@@ -99,7 +95,7 @@ def google_login():
 
 @app.route("/check-login", methods=['POST'])
 def check_login():
-    
+ 
     check_id = request.json['loginId']
 
     if(session['id'] == check_id):

@@ -26,7 +26,7 @@ class User(UserMixin):
         if(a['password'] != checkPass):
             return(False)
         else:
-            return(json_util.dumps(a))
+            return(a['user_id'])
 
     @staticmethod
     def create(data):
