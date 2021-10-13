@@ -45,7 +45,12 @@ class User(UserMixin):
             return False
         else:
             return True
-        
+    
+    @staticmethod
+    def get_user_info(id):
+        a = profiles.find_one({'user_id': id})
+        print(a)
+        return(a)
         
 
 

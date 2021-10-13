@@ -15,26 +15,31 @@ export default function Profile(){
 
     let { id } = useParams();
 
-    useEffect(() => {
 
-        fetch('/check-login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            // es-lint-disable-next-line
-            body: JSON.stringify({loginId : id})
-          })
-          .then((response) => response.text())
-          .then((data) => {
-            if(data === 'Authenticated'){
-                setIsLoggedIn(true)
-            }else{
-                setIsLoggedIn(false)
-            }
-          })
+    useEffect(() => {
+        if(!isLoggedIn){
+            fetch('/check-login', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                // es-lint-disable-next-line
+                body: JSON.stringify({loginId : id})
+              })
+              .then((response) => response.text())
+              .then((data) => {
+                if(data === 'Authenticated'){
+                    setIsLoggedIn(true)
+                }else{
+                    setIsLoggedIn(false)
+                }
+              })
+        }else{
+            setIsLoggedIn(true)
+        }
+        
         // es-lint-disable-next-line
-    },[id])
+    },[id, isLoggedIn])
 
     function DropDownMenu() {
 
@@ -98,7 +103,57 @@ export default function Profile(){
     }
 
     const ProfilePage = () => {
+
+        const profileText = {
+            marginTop: '4%',
+            marginLeft: '18%',
+            fontFamily: 'Noto Sans Display',
+            fontWeight: '500',
+            fontSize: '18px',
+            lineHeight: '25px',
+            letterSpacing: '-0.035em',
+            color: '#333333'
+        }
+
+        const profileTextIntro = {
+            fontFamily: 'Noto Sans Display',
+            fontSize: '20px',
+            lineHeight: '18px',
+            color: '#BDBDBD',
+            letterSpacing: '-0.035em',
+            marginTop:'4%',
+            marginLeft: '5%',
+        }
+
+         // store user info
+
+         const [ UserData, SetUserData ] = useState([]);
+
+
+         // get user info
+
+         useEffect(() => {
+
+            fetch('/get_user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({userid: id})
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                SetUserData(data)
+            })
+            
+         },[SetUserData])
+
+
+         
+
         if(isLoggedIn){
+
+            
             return (
                 <>
                     <Box sx={{ marginTop: '1.5%'}}>
@@ -113,54 +168,66 @@ export default function Profile(){
                     </Box>
                     <Box sx={{
                         marginTop: '2%',
-                        marginLeft: '17%',
-                        width: '75em',
-                        height: '35em',
+                        marginLeft: '22%',
+                        width: '67em',
+                        height: '53em',
                         border: '1px solid #E0E0E0',
                         borderRadius: '12px',
                     }}>
                         <Box sx={{ display: 'flex', flexDirection: 'row', height:'7.5em'}}>
                             <Box sx={{ marginTop:'3%', marginLeft:'5%'}}>
                                 <Typography sx={{ fontFamily: 'Noto Sans Display', fontWeight: 'normal', fontSize:'24px', lineHeight:'33px', letterSpacing:'-0.035em'}}>Profile</Typography>
-                                <Typography sx={{ fontFamily: 'Noto Sans Display', fontWeight:'500', fontSize:'13px', lineHeight:'18px', letterSpacing:'-0.035em'}}>Some info may be visible to other people</Typography>
+                                <Typography sx={{ fontFamily: 'Noto Sans Display', fontWeight:'500', fontSize:'13px', lineHeight:'18px', letterSpacing:'-0.035em', color:'#828282'}}>Some info may be visible to other people</Typography>
                             </Box>
-                            <Button variant='outlined'sx={{ height: '3em', border:'1px solid #828282', borderRadius:'12px', marginLeft: '65%', marginTop:'3%'}}>
+                            <Button variant='outlined'sx={{ height: '3em', border:'1px solid #828282', borderRadius:'12px', marginLeft: '60%', marginTop:'3%'}}>
                                 <Typography sx={{ fontFamily: 'Noto Sans Display', color:'#828282',fontSize: '16px', lineHeight: '22px', letterSpacing:'-0.035em'}}>Edit</Typography>
                             </Button>
                         </Box>
                         <Divider/>
 
                         <Box sx={{ display: 'flex', flexDirection: 'row', height: '8.5em'}}>
-                            <Typography sx={{ fontFamily:'Noto Sans Display', fontSize:'13px', lineHeight:'18px', color:'#BDBDBD', letterSpacing:'-0.035em'}}>
+                            <Typography sx={profileTextIntro}>
                                 Photo
                             </Typography>
-                            <img src={profPic} alt="stock 2"style={{ borderRadius: '8px', width: '6em', height: '6em', marginTop:'1.5%', marginLeft:'18%' }}/>
+                            <img src={UserData.profile_pic} alt="stock 2"style={{ borderRadius: '8px', width: '6em', height: '6em', marginTop:'1.5%', marginLeft:'18%' }}/>
                         </Box>
                         <Divider/>
 
-                        <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                            <Typography>Name</Typography>
-                            <Typography>Test Name</Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', height: '7.5em'}}>
+                            <Typography
+                                sx={profileTextIntro}
+                            >
+                                Name
+                            </Typography>
+                            <Typography
+                                sx={profileText}
+                            >
+                                {UserData.name}
+                            </Typography>
                         </Box>
                         <Divider/>
-                        <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                            <Typography>Bio</Typography>
-                            <Typography>Software developer</Typography>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'row', height: '7.5em'}}>
+                            <Typography sx={profileTextIntro}>Bio</Typography>
+                            <Typography sx={profileText} style={{marginLeft:'20%'}}>{UserData.bio}</Typography>
                         </Box>
                         <Divider/>
-                        <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                            <Typography>Photo</Typography>
-                            <Typography>9023454657</Typography>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'row', height: '7.5em'}}>
+                            <Typography sx={profileTextIntro}>Photo</Typography>
+                            <Typography sx={profileText}>{UserData.phone}</Typography>
                         </Box>
                         <Divider/>
-                        <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                            <Typography>Email</Typography>
-                            <Typography>abc123@gmail.com</Typography>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'row', height:'7.5em'}}>
+                            <Typography sx={profileTextIntro}>Email</Typography>
+                            <Typography sx={profileText} style={{marginLeft: '18.5%'}}>{UserData.email}</Typography>
                         </Box>
                         <Divider/>
-                        <Box sx={{ display: 'flex', flexDirection: 'row'}}>
-                            <Typography>Password</Typography>
-                            <Typography>***********</Typography>
+
+                        <Box sx={{ display: 'flex', flexDirection: 'row', height:'7.5em'}}>
+                            <Typography sx={profileTextIntro}>Password</Typography>
+                            <Typography sx={profileText} style={{ marginLeft: '15.5%'}}>***********</Typography>
                         </Box>
                         <Divider/>
                     </Box>

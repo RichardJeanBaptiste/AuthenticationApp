@@ -36,11 +36,13 @@ except:
 def register():
 
     x = {
-        'user_id': str(random.randrange(1, 10**10)),
+        'user_id': str(random.randrange(1, 10**11)),
         'email': request.form['email'],
         'password': request.form['password'],
-        'profile_pic': '', 
-        'data': json.dumps({})
+        'profile_pic': '',
+        'name': '',
+        'bio': '',
+        'phone': ''
     }
     if(User.create(x) == True):
         return redirect('http://localhost:3000/login')
@@ -63,13 +65,15 @@ def login():
 
 @app.route("/register_google", methods=['POST'])
 def google_register():
+
     
     x = {
         'user_id': request.json['googleId'],
         'email': request.json['email'],
         'profile_pic': request.json['imageUrl'],
-        'data': json.dumps({})
-        
+        'name': '',
+        'bio': '',
+        'phone': '' 
     }
     if(User.create(x) == True):
         return "User Created"
@@ -103,6 +107,24 @@ def check_login():
     else:
         return 'Not Authenticated'
 
+@app.route("/get_user", methods=["GET", "POST"])
+def get_user():
+
+    UserId = request.json['userid']
+    Current_Search = User.get_user_info(UserId)
+
+    #print(Current_Search['user_id'])
+    x = {
+        'user_id': Current_Search['user_id'],
+        'email': Current_Search['email'],
+        'profile_pic': Current_Search['profile_pic'],
+        'name': Current_Search['name'],
+        'bio': Current_Search['bio'],
+        'phone': Current_Search['phone']
+    }
+
+    return x
+    
     
 
 
