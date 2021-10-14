@@ -47,9 +47,9 @@ export default function Login() {
   const history = useHistory();
 
   const responseGoogle = (response) => {
-    console.log("abcdedfas")
-    console.log(response);
-    console.log(response.profileObj);
+    //console.log("abcdedfas")
+    //console.log(response);
+    //console.log(response.profileObj);
   }
 
   const successLogin = (response) => {

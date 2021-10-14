@@ -6,7 +6,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DevLightIcon from './DevLightIcon';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import profPic from '../assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg';
+import EditProfile from './EditProfile';
 
 
 export default function Profile(){
@@ -40,6 +42,7 @@ export default function Profile(){
         
         // es-lint-disable-next-line
     },[id, isLoggedIn])
+
 
     function DropDownMenu() {
 
@@ -129,6 +132,8 @@ export default function Profile(){
 
          const [ UserData, SetUserData ] = useState([]);
 
+         const [ isEditing, setIsEditing ] = useState(false);
+
 
          // get user info
 
@@ -148,12 +153,31 @@ export default function Profile(){
             
          },[SetUserData])
 
+         function handleEditing() {
+             if(!isEditing){
+                 setIsEditing(true)
+             }else{
+                 setIsEditing(false)
+             }
+         }
+
 
          
 
-        if(isLoggedIn){
+        if(isEditing && isLoggedIn){
+            return (
+                <>
+                    <Button variant="text" onClick={handleEditing} startIcon={<ChevronLeftIcon/>} sx={{
+                        marginTop: '2%',
+                        marginLeft: '22%',
+                    }}>
+                        Back
+                    </Button>
+                    <EditProfile UserInfo={UserData} id={id}/>
+                </>
+            )
+        }else if(isLoggedIn){
 
-            
             return (
                 <>
                     <Box sx={{ marginTop: '1.5%'}}>
@@ -179,9 +203,13 @@ export default function Profile(){
                                 <Typography sx={{ fontFamily: 'Noto Sans Display', fontWeight: 'normal', fontSize:'24px', lineHeight:'33px', letterSpacing:'-0.035em'}}>Profile</Typography>
                                 <Typography sx={{ fontFamily: 'Noto Sans Display', fontWeight:'500', fontSize:'13px', lineHeight:'18px', letterSpacing:'-0.035em', color:'#828282'}}>Some info may be visible to other people</Typography>
                             </Box>
-                            <Button variant='outlined'sx={{ height: '3em', border:'1px solid #828282', borderRadius:'12px', marginLeft: '60%', marginTop:'3%'}}>
+
+                            
+                            <Button variant='outlined'sx={{ height: '3em', border:'1px solid #828282', borderRadius:'12px', marginLeft: '60%', marginTop:'3%'}} onClick={handleEditing}>
                                 <Typography sx={{ fontFamily: 'Noto Sans Display', color:'#828282',fontSize: '16px', lineHeight: '22px', letterSpacing:'-0.035em'}}>Edit</Typography>
                             </Button>
+                            
+                            
                         </Box>
                         <Divider/>
 
@@ -251,7 +279,7 @@ export default function Profile(){
                     <DevLightIcon/>
                 </Box>
                 {/** Profile Dropdown */}
-                <Box sx={{ marginLeft: '77%'}}>
+                <Box sx={{ marginLeft: '82%'}}>
                     <img src={profPic} alt="Stock 1" width='32px' height='36px' style={{ marginTop:'9.5%', marginLeft: '-32%', borderRadius: '8px'}}/>
                     <Box sx={{ marginTop: '-34%', marginLeft: '4%'}}>
                         <Typography variant='p'> Test Name </Typography>

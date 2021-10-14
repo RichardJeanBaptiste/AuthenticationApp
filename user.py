@@ -51,6 +51,15 @@ class User(UserMixin):
         a = profiles.find_one({'user_id': id})
         print(a)
         return(a)
+    
+    @staticmethod
+    def edit_user(id, data):
+        try:
+            profiles.find_one_and_update({"user_id": id}, {"$set": data} )
+            return True
+        except:
+            return False
+
         
 
 

@@ -1,9 +1,8 @@
-from os import abort
 import random
 import os
-from flask import Flask, json, request, session, redirect
+from flask import Flask, request, session, redirect
 from flask_cors import CORS
-from flask_login import LoginManager, current_user, login_manager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_manager
 from oauthlib.oauth2 import WebApplicationClient
 from pymongo import MongoClient
 from werkzeug.utils import redirect
@@ -124,6 +123,12 @@ def get_user():
     }
 
     return x
+
+@app.route("/edit_user", methods=["POST"])
+def edit_user():
+    print(request.json)
+    User.edit_user(request.json['user_id'], request.json)
+    return 'abcd'
     
     
 

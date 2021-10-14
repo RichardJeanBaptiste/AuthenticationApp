@@ -7,4 +7,11 @@ db = client.Users
 profiles = db.profiles
 
 
-print(profiles.find_one({ "email": "Richinbk1@gmail.com"}))
+x = {
+    
+}
+
+profiles.find_one_and_update({"user_id": "1234"}, { '$set' : {'name': 'dave', 'bio': 'ascascsacsa'}})
+
+
+#print(profiles.find_one({ "email": "Richinbk1@gmail.com"}))
