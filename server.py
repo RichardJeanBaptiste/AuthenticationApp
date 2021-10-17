@@ -73,7 +73,8 @@ def google_register():
         'profile_pic': request.json['imageUrl'],
         'name': '',
         'bio': '',
-        'phone': '' 
+        'phone': '',
+        'password': '*',
     }
     if(User.create(x) == True):
         return "User Created"
@@ -113,7 +114,6 @@ def get_user():
     UserId = request.json['userid']
     Current_Search = User.get_user_info(UserId)
 
-    #print(Current_Search['user_id'])
     x = {
         'user_id': Current_Search['user_id'],
         'email': Current_Search['email'],
@@ -127,7 +127,6 @@ def get_user():
 
 @app.route("/edit_user", methods=["POST"])
 def edit_user():
-    print(request.json)
     User.edit_user(request.json['user_id'], request.json)
     return 'abcd'
 
@@ -137,10 +136,6 @@ def logout_user():
     return redirect("http://localhost:3000/login")
     
     
-
-
-
-
 
 
 if __name__ == "__main__":

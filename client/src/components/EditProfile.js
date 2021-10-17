@@ -3,6 +3,8 @@ import { Box, Typography, FormControl, InputLabel, OutlinedInput, Button, Modal 
 import { useHistory } from 'react-router-dom';
 import {useDropzone} from 'react-dropzone';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+const axios = require('axios').default;
+
 
  
 
@@ -13,7 +15,7 @@ export default function EditProfile(props){
             marginTop: '1%',
             marginLeft: '22%',
             width: '67em',
-            height: '53em',
+            height: '55em',
             border: '1px solid #E0E0E0',
             borderRadius: '12px',
         },
@@ -61,7 +63,13 @@ export default function EditProfile(props){
 
     const [ email, setEmail ] = useState("");
 
+    const [ newPassword, setNewPassword ] = useState("");
+
     const [ imageUrl , setImageUrl ] = useState("");
+
+    const [ localImage, setLocalImage ] = useState(false);
+
+    const [ localName, setLocalName ] = useState("");
  
 
     function handleNameChange(e) {
@@ -80,7 +88,36 @@ export default function EditProfile(props){
         setEmail(e.target.value);
     }
 
+    function handlePasswordChange(e){
+        setNewPassword(e.target.value);
+    }
+
     function SaveChanges(){
+        
+
+        let profUrl;
+
+        if(localImage === false){
+            profUrl = imageUrl;
+        }else{
+            const formData = new FormData();
+            formData.append('user_image', localImage)
+
+            axios({
+               url: `https://richinbkimageuploader.herokuapp.com/image_upload/${props.id}`,
+                method: 'POST',
+                data: formData,
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'multipart/form-data',
+                }
+              }).catch(function (error) {
+                console.log(error);
+              });
+
+            profUrl = `https://richinbkimageuploader.herokuapp.com/download/${props.id}-${localName}`
+            
+        }
 
         let UserChanges = {
             'user_id': props.id,
@@ -88,7 +125,8 @@ export default function EditProfile(props){
             'bio': bio === "" ? UserData.bio : bio,
             'phone': phone === "" ? UserData.phone : phone,
             'email': email === "" ? UserData.email : email,
-            'profile_pic': imageUrl === "" ? UserData.profile_pic : imageUrl 
+            'profile_pic': imageUrl === "" ? UserData.profile_pic : profUrl,
+            'password': newPassword === "" ? UserData.password : newPassword,
         }
 
         fetch('/edit_user', {
@@ -111,13 +149,19 @@ export default function EditProfile(props){
 
         const {getRootProps, getInputProps} = useDropzone({
 
-            onDrop: files => setImageUrl(URL.createObjectURL(files[0]))
+            onDrop: DropCallBack
         });
 
+        function DropCallBack(files) {
+            setImageUrl(URL.createObjectURL(files[0]));
+            setLocalImage(files[0]);
+            setLocalName(files[0].name);
+        }
         
 
         function handleStateChange(e) {
             setStateUrl(e.target.value);
+            setLocalImage(false);
         }
 
         
@@ -137,8 +181,9 @@ export default function EditProfile(props){
                         </Button>
                     </Box>
                     
+                    <Typography variant="h4" align='center'>Or</Typography>
 
-                    <input value={stateUrl} onChange={handleStateChange}/>
+                    <input value={stateUrl} placeholder='Enter a url' onChange={handleStateChange}/>
                     <Button variant='outlined' sx={{marginTop: '5%', marginLeft: '23%', width:'20em'}} onClick={handleUpload}>save</Button>
                 </Box>
                 
@@ -155,7 +200,6 @@ export default function EditProfile(props){
         const handleOpen = () => setOpen(true);
         const handleClose = () => setOpen(false);
         
-        {/** */}
         return (
             <Box sx={styles.photoStyle}>
                 <img src={imageUrl} alt="click here" style={{ width: '7em', height: '5em', borderRadius: '8px'}} onClick={handleOpen}/> 
@@ -243,6 +287,12 @@ export default function EditProfile(props){
                <FormControl variant="outlined" sx={styles.formPos}>
                     <InputLabel htmlFor="email-input" sx={{marginTop: '-1%'}}>Email</InputLabel>
                     <OutlinedInput id="email-input" placeholder="Enter Your Email" value={email} onChange={handleEmailChange}
+                    sx={styles.formStyle}/>
+               </FormControl>
+
+               <FormControl variant="outlined" sx={styles.formPos}>
+                    <InputLabel htmlFor="pass-input" sx={{marginTop: '-1%'}}>Password</InputLabel>
+                    <OutlinedInput id="pass-input" placeholder="Enter Your Password" value={newPassword} onChange={handlePasswordChange}
                     sx={styles.formStyle}/>
                </FormControl>
              

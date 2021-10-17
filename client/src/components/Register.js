@@ -8,9 +8,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import GoogleLink from '../assets/Google.svg';
-import FacebookLink from '../assets/Facebook.svg';
-import TwitterLink from '../assets/Twitter.svg';
-import GithubLink from '../assets/Gihub.svg';
 import '../App.css';
 
 
@@ -179,9 +176,6 @@ export default function Register() {
                           onFailure={responseGoogle}
                           cookiePolicy={'single_host_origin'}
                     />
-                    <img src={FacebookLink} alt="facebook icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
-                    <img src={TwitterLink} alt="twitter icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
-                    <img src={GithubLink} alt="github icon" width='40px' height='40px' style={{ marginLeft:'5%'}}/>
                 </Box>
 
                 <Typography style={{ marginTop:'8%', marginLeft:'22%' ,color:'#828282', fontSize:'14px', lineHeight:'19px', letterSpacing:'-0.035em', fontWeight:'normal'}}>

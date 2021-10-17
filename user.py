@@ -23,10 +23,19 @@ class User(UserMixin):
     def get_from_db(data):
         checkPass = data['password']
         a = profiles.find_one({'email': data['email']})
-        if(a['password'] != checkPass):
+        try:
+            if(a['password'] != checkPass):
+                return(None)
+            elif(a['password'] == '*'):
+                return(None)
+            else:
+                return(a['user_id'])
+        except KeyError:
             return(None)
-        else:
-            return(a['user_id'])
+        except:
+            return(None)
+
+        
 
     @staticmethod
     def create(data):
@@ -49,7 +58,7 @@ class User(UserMixin):
     @staticmethod
     def get_user_info(id):
         a = profiles.find_one({'user_id': id})
-        print(a)
+        #print(a)
         return(a)
     
     @staticmethod

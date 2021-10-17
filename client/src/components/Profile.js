@@ -1,14 +1,9 @@
 import { React, useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import { Box, Typography, Menu, MenuItem, IconButton, Button, Divider, ListItemIcon, ListItemText } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import GroupIcon from '@mui/icons-material/Group';
-import LogoutIcon from '@mui/icons-material/Logout';
-import DevLightIcon from './DevLightIcon';
+import { useParams } from 'react-router-dom';
+import { Box, Typography, Button, Divider } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import profPic from '../assets/joseph-gonzalez-iFgRcqHznqg-unsplash.jpg';
 import EditProfile from './EditProfile';
+import Header from './Header';
 
 
 export default function Profile(){
@@ -16,8 +11,6 @@ export default function Profile(){
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
 
     let { id } = useParams();
-
-    let history = useHistory();
 
 
     useEffect(() => {
@@ -45,75 +38,6 @@ export default function Profile(){
         // es-lint-disable-next-line
     },[id, isLoggedIn])
 
-
-    function DropDownMenu() {
-
-        const [ anchorEl, setAnchorEl ] = useState(null);
-        const open = Boolean(anchorEl);
-
-        const handleClick = (e) => {
-            setAnchorEl(e.currentTarget);
-        }
-
-        const handleClose = () => {
-            setAnchorEl(null);
-        }
-
-        function LogoutUser() {
-            fetch('/logout',{
-                method: 'POST'
-            }).then(()=> {
-                history.push("/login")
-            })
-        }
-
-        return (
-            <>
-                <IconButton 
-                    aria-label='Dropdown Menu' 
-                    id='Dropdown-menu'
-                    onClick={handleClick}
-                    sx={{ marginLeft: '-6%'}}
-                >
-                    <ArrowDropDownIcon/>
-                </IconButton>
-                <Menu
-                    id='basic-menu'
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'Dropdown-menu'
-                    }}
-                    sx={{ marginTop: '.5%', marginLeft: '-2%', border:'1px solid #E0E0E0', borderRadius:'12px'}}
-                >
-                    <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <AccountCircleIcon sx={{ color: '#4F4F4F'}}/>
-                        </ListItemIcon>
-                        <ListItemText sx={{ color: '#4F4F4F'}}>Profile</ListItemText>
-                    </MenuItem>
-                   
-                    <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <GroupIcon sx={{ color: '#4F4F4F'}}/>
-                        </ListItemIcon>
-                        <ListItemText sx={{ color: '#4F4F4F'}} >Group Chat</ListItemText>
-                    </MenuItem>
-
-                    <Divider/>
-
-                    <MenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                            <LogoutIcon sx={{ color: '#EB5757'}}/>
-                        </ListItemIcon>
-                        <ListItemText sx={{ color: '#EB5757' }} onClick={LogoutUser}>Logout</ListItemText>
-                    </MenuItem>
-                </Menu>
-
-            </>
-        )
-    }
 
     const ProfilePage = () => {
 
@@ -171,39 +95,13 @@ export default function Profile(){
              }
          }
 
-         function Header() {
-             return (
-                <>
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        width: '100vw',
-                    }}>
-                        <Box sx={{ marginTop:'.5%', marginLeft: '2%'}}>
-                            <DevLightIcon/>
-                        </Box>
-
-                        <Box sx={{ marginLeft: '82%'}}>
-                            <img src={UserData.profile_pic} alt="Stock 1" width='32px' height='36px' style={{ marginTop:'9.5%', marginLeft: '-32%', borderRadius: '8px'}}/>
-                            <Box sx={{ marginTop: '-34%', marginLeft: '4%'}}>
-                                <Typography variant='p'> Test Name </Typography>
-                                <DropDownMenu/>
-                            </Box>
-                        </Box>      
-                    </Box>
-                </>
-             )
-         }
-
-
-         
 
         if(isEditing && isLoggedIn){
             return (
                 <>
-                    <Header/>
+                    <Header prof_image={UserData.profile_pic}/>
                     <Button variant="text" onClick={handleEditing} startIcon={<ChevronLeftIcon/>} sx={{
-                        marginTop: '2%',
+                        marginTop: '3.5%',
                         marginLeft: '22%',
                     }}>
                         Back
@@ -215,7 +113,7 @@ export default function Profile(){
 
             return (
                 <>
-                    <Header/> 
+                    <Header prof_image={UserData.profile_pic}/>
                     <Box sx={{ marginTop: '1.5%'}}>
                         <Typography variant='h3' align='center' sx={{ 
                             fontFamily:'Noto Sans Display', 
@@ -278,8 +176,8 @@ export default function Profile(){
                         <Divider/>
 
                         <Box sx={{ display: 'flex', flexDirection: 'row', height: '7.5em'}}>
-                            <Typography sx={profileTextIntro}>Photo</Typography>
-                            <Typography sx={profileText}>{UserData.phone}</Typography>
+                            <Typography sx={profileTextIntro}>Phone Number</Typography>
+                            <Typography sx={profileText} style={{marginLeft: '10.5%'}}>{UserData.phone}</Typography>
                         </Box>
                         <Divider/>
 
@@ -310,11 +208,3 @@ export default function Profile(){
         </>
     )
 }
-
-
-/**
- * 
- * 
- *          
- * 
- */
