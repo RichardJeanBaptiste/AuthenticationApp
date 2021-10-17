@@ -1,6 +1,7 @@
 import random
 import os
 from flask import Flask, request, session, redirect
+from flask.helpers import url_for
 from flask_cors import CORS
 from flask_login import LoginManager, login_manager
 from oauthlib.oauth2 import WebApplicationClient
@@ -51,11 +52,11 @@ def register():
 @app.route("/login", methods=['GET','POST'])
 def login():
     x = {
-        'email': request.form['email'],
-        'password': request.form['password']
+        'email': request.form['email'].lower(),
+        'password': request.form['password'].lower()
     }
 
-    if(User.get_from_db(x) == False):
+    if(User.get_from_db(x) == None):
         return("Incorrect Username Or Password")
     else:
         userId = User.get_from_db(x)
@@ -129,6 +130,11 @@ def edit_user():
     print(request.json)
     User.edit_user(request.json['user_id'], request.json)
     return 'abcd'
+
+@app.route("/logout", methods=['GET','POST'])
+def logout_user():
+    session.pop('id', None)
+    return redirect("http://localhost:3000/login")
     
     
 

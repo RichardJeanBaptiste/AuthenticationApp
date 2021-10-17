@@ -1,6 +1,9 @@
 import { React, useState } from 'react';
-import { Box, Typography, FormControl, InputLabel, OutlinedInput, Button } from '@mui/material';
+import { Box, Typography, FormControl, InputLabel, OutlinedInput, Button, Modal } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import {useDropzone} from 'react-dropzone';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+
  
 
 export default function EditProfile(props){
@@ -31,6 +34,18 @@ export default function EditProfile(props){
         formStyle: {
             width: '40em',
             borderRadius: '12px'
+        },
+        modalStyle: {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 500,
+            height: 300,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
         }
     }
 
@@ -45,6 +60,9 @@ export default function EditProfile(props){
     const [ phone, setPhone ] = useState("");
 
     const [ email, setEmail ] = useState("");
+
+    const [ imageUrl , setImageUrl ] = useState("");
+ 
 
     function handleNameChange(e) {
         setName(e.target.value);
@@ -69,7 +87,8 @@ export default function EditProfile(props){
             'name': name === "" ? UserData.name : name,
             'bio': bio === "" ? UserData.bio : bio,
             'phone': phone === "" ? UserData.phone : phone,
-            'email': email === "" ? UserData.email : email 
+            'email': email === "" ? UserData.email : email,
+            'profile_pic': imageUrl === "" ? UserData.profile_pic : imageUrl 
         }
 
         fetch('/edit_user', {
@@ -83,6 +102,86 @@ export default function EditProfile(props){
         })
 
     }
+
+
+    function UploadHandler(props) {
+
+
+        const [ stateUrl , setStateUrl ] = useState("");
+
+        const {getRootProps, getInputProps} = useDropzone({
+
+            onDrop: files => setImageUrl(URL.createObjectURL(files[0]))
+        });
+
+        
+
+        function handleStateChange(e) {
+            setStateUrl(e.target.value);
+        }
+
+        
+        function handleUpload(){
+
+            setImageUrl(stateUrl)
+        }
+
+
+        return (
+            <>
+                <Box sx={{ display: 'flex', flexDirection:'column'}}>
+                    <Box {...getRootProps({className: 'dropzone'})}>
+                        <input {...getInputProps()} />
+                        <Button sx={{ marginTop: '3%', marginLeft: '30%'}} startIcon={<UploadFileIcon/>}>
+                            click to select files
+                        </Button>
+                    </Box>
+                    
+
+                    <input value={stateUrl} onChange={handleStateChange}/>
+                    <Button variant='outlined' sx={{marginTop: '5%', marginLeft: '23%', width:'20em'}} onClick={handleUpload}>save</Button>
+                </Box>
+                
+            </>
+        )
+    }
+
+  
+  
+
+    function PhotoModal() {
+
+        const [open, setOpen] = useState(false);
+        const handleOpen = () => setOpen(true);
+        const handleClose = () => setOpen(false);
+        
+        {/** */}
+        return (
+            <Box sx={styles.photoStyle}>
+                <img src={imageUrl} alt="click here" style={{ width: '7em', height: '5em', borderRadius: '8px'}} onClick={handleOpen}/> 
+                <Typography sx={{
+                    fontFamily:'Noto Sans Display',
+                    fontWeight: '500',
+                    fontStyle: 'normal',
+                    fontSize: '13px',
+                    lineHeight: '18px',
+                    letterSpacing: '-0.035em',
+                    color: '#828282',
+                }}>CHANGE PHOTO</Typography>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={styles.modalStyle}>
+                        <UploadHandler/>  
+                    </Box>
+                </Modal>
+            </Box>
+        );
+    }
+
 
 
     return (
@@ -114,23 +213,12 @@ export default function EditProfile(props){
             <Box sx={{ display:'flex', flexDirection: 'column'}}>
 
                 
-               <Box sx={styles.photoStyle}>
-                    <img src={UserData.profile_pic} alt="stock 1" style={{ width: '60px', height: '60px', borderRadius: '8px'}}/>
-                    <Typography sx={{
-                        fontFamily:'Noto Sans Display',
-                        fontWeight: '500',
-                        fontStyle: 'normal',
-                        fontSize: '13px',
-                        lineHeight: '18px',
-                        letterSpacing: '-0.035em',
-                        color: '#828282',
-                        marginLeft: '4%',
-                        marginTop:'1%'
-                    }}>CHANGE PHOTO</Typography>
+               <Box>
+                   <PhotoModal/>
                </Box>
 
               
-               <FormControl variant="outlined" sx={styles.formPos}>
+               <FormControl variant="outlined" sx={{ marginTop: '3.5%', marginLeft: '5.5%'}}>
                     <InputLabel htmlFor="name-input" sx={{marginTop: '-1%'}}>Name</InputLabel>
                     <OutlinedInput id="name-input"  placeholder="Enter Your Name" value={name} onChange={handleNameChange}
                     sx={styles.formStyle}/>

@@ -24,7 +24,7 @@ class User(UserMixin):
         checkPass = data['password']
         a = profiles.find_one({'email': data['email']})
         if(a['password'] != checkPass):
-            return(False)
+            return(None)
         else:
             return(a['user_id'])
 

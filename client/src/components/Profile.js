@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Box, Typography, Menu, MenuItem, IconButton, Button, Divider, ListItemIcon, ListItemText } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -16,6 +16,8 @@ export default function Profile(){
     const [ isLoggedIn, setIsLoggedIn ] = useState(false);
 
     let { id } = useParams();
+
+    let history = useHistory();
 
 
     useEffect(() => {
@@ -55,6 +57,14 @@ export default function Profile(){
 
         const handleClose = () => {
             setAnchorEl(null);
+        }
+
+        function LogoutUser() {
+            fetch('/logout',{
+                method: 'POST'
+            }).then(()=> {
+                history.push("/login")
+            })
         }
 
         return (
@@ -97,7 +107,7 @@ export default function Profile(){
                         <ListItemIcon>
                             <LogoutIcon sx={{ color: '#EB5757'}}/>
                         </ListItemIcon>
-                        <ListItemText sx={{ color: '#EB5757' }}>Logout</ListItemText>
+                        <ListItemText sx={{ color: '#EB5757' }} onClick={LogoutUser}>Logout</ListItemText>
                     </MenuItem>
                 </Menu>
 
@@ -161,12 +171,37 @@ export default function Profile(){
              }
          }
 
+         function Header() {
+             return (
+                <>
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '100vw',
+                    }}>
+                        <Box sx={{ marginTop:'.5%', marginLeft: '2%'}}>
+                            <DevLightIcon/>
+                        </Box>
+
+                        <Box sx={{ marginLeft: '82%'}}>
+                            <img src={UserData.profile_pic} alt="Stock 1" width='32px' height='36px' style={{ marginTop:'9.5%', marginLeft: '-32%', borderRadius: '8px'}}/>
+                            <Box sx={{ marginTop: '-34%', marginLeft: '4%'}}>
+                                <Typography variant='p'> Test Name </Typography>
+                                <DropDownMenu/>
+                            </Box>
+                        </Box>      
+                    </Box>
+                </>
+             )
+         }
+
 
          
 
         if(isEditing && isLoggedIn){
             return (
                 <>
+                    <Header/>
                     <Button variant="text" onClick={handleEditing} startIcon={<ChevronLeftIcon/>} sx={{
                         marginTop: '2%',
                         marginLeft: '22%',
@@ -180,6 +215,7 @@ export default function Profile(){
 
             return (
                 <>
+                    <Header/> 
                     <Box sx={{ marginTop: '1.5%'}}>
                         <Typography variant='h3' align='center' sx={{ 
                             fontFamily:'Noto Sans Display', 
@@ -270,25 +306,15 @@ export default function Profile(){
 
     return (
         <>
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                width: '100vw',
-            }}>
-                <Box sx={{ marginTop:'.5%', marginLeft: '2%'}}>
-                    <DevLightIcon/>
-                </Box>
-                {/** Profile Dropdown */}
-                <Box sx={{ marginLeft: '82%'}}>
-                    <img src={profPic} alt="Stock 1" width='32px' height='36px' style={{ marginTop:'9.5%', marginLeft: '-32%', borderRadius: '8px'}}/>
-                    <Box sx={{ marginTop: '-34%', marginLeft: '4%'}}>
-                        <Typography variant='p'> Test Name </Typography>
-                        <DropDownMenu/>
-                    </Box>
-                </Box>      
-                {/** Profile Dropdown */}
-            </Box>
             <ProfilePage/>
         </>
     )
 }
+
+
+/**
+ * 
+ * 
+ *          
+ * 
+ */
