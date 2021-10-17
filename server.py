@@ -10,10 +10,10 @@ from werkzeug.utils import redirect
 from db_functions import *
 from user import User
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='./build', static_url_path='/')
 CORS(app)
 
-app.secret_key = "SECRET"
+app.secret_key = "ajs76agwgfa7fha6fg7a6f671ga7"
 
 GOOGLE_CLIENT_ID = os.environ.get("1097732373698-72rm00sovc1v5fhga05p9s2cc8tvbrru.apps.googleusercontent.com", None)
 GOOGLE_CLIENT_SECRET = os.environ.get("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", None)
@@ -32,6 +32,11 @@ except:
     print("Failed to connect to database")
 
 
+@app.route("/", defaults={'path': ''})
+def serve(path):
+    return app.send_static_file('index.html')
+
+
 @app.route("/register", methods=["POST"])
 def register():
 
@@ -45,7 +50,7 @@ def register():
         'phone': ''
     }
     if(User.create(x) == True):
-        return redirect('http://localhost:3000/login')
+        return redirect('https://richinbkauthapp.herokuapp.com/login')
     else:
         return 'User Exists'
 
@@ -61,7 +66,7 @@ def login():
     else:
         userId = User.get_from_db(x)
         session['id'] = userId
-        return redirect("http://localhost:3000/profile/" + userId)
+        return redirect("https://richinbkauthapp.herokuapp.com/profile/" + userId)
 
 @app.route("/register_google", methods=['POST'])
 def google_register():
@@ -133,10 +138,10 @@ def edit_user():
 @app.route("/logout", methods=['GET','POST'])
 def logout_user():
     session.pop('id', None)
-    return redirect("http://localhost:3000/login")
+    return redirect("https://richinbkauthapp.herokuapp.com/login")
     
     
 
 
 if __name__ == "__main__":
-    app.run(debug=True, ssl_context="adhoc")
+    app.run(host='0.0.0.0',debug=False, port=os.environ.get('PORT',80))
