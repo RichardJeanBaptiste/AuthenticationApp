@@ -33,9 +33,9 @@ export default function Register() {
   // Google login callback
 
   const responseGoogle = (response) => {
-    console.log("abcdedfas")
-    console.log(response);
-    console.log(response.profileObj);
+    //console.log("abcdedfas")
+    //console.log(response);
+    //console.log(response.profileObj);
   }
 
   const successRegister = (response) => {
@@ -106,7 +106,7 @@ export default function Register() {
                 }}
                 >{'Master web development by making real-life \nprojects. There are multiple paths for you to \nchoose'}</Typography>
 
-                <form action="https://localhost:5000/register" method="POST">
+                <form action="https://richinbkauthapp.herokuapp.com/register" method="POST">
 
                 <TextField 
                   variant='outlined' 
