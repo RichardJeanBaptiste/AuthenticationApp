@@ -1,9 +1,6 @@
 import random
 import os
 from flask import Flask, request, session, redirect, send_from_directory
-from flask.helpers import url_for
-from flask_cors import CORS
-from flask_login import LoginManager, login_manager
 from oauthlib.oauth2 import WebApplicationClient
 from pymongo import MongoClient
 from werkzeug.utils import redirect

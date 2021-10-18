@@ -21,7 +21,6 @@ function App() {
   
 
   return (
-    <>
       <Router>
         <Switch>
           <Route exact path="/">
@@ -38,7 +37,6 @@ function App() {
           </Route>
         </Switch>
       </Router>
-    </>
   );
 }
 
