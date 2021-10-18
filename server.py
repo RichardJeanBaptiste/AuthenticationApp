@@ -11,7 +11,7 @@ from db_functions import *
 from user import User
 
 app = Flask(__name__, static_folder='./build', static_url_path='/')
-CORS(app)
+#CORS(app)
 
 app.secret_key = "ajs76agwgfa7fha6fg7a6f671ga7"
 
@@ -32,7 +32,7 @@ except:
     print("Failed to connect to database")
 
 
-@app.route("/", defaults={'path': ''})
+@app.route("/", defaults={'path':''})
 def serve(path):
     return app.send_static_file('index.html')
 
