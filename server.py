@@ -1,6 +1,6 @@
 import random
 import os
-from flask import Flask, request, session, redirect
+from flask import Flask, request, session, redirect, send_from_directory
 from flask.helpers import url_for
 from flask_cors import CORS
 from flask_login import LoginManager, login_manager
@@ -10,7 +10,7 @@ from werkzeug.utils import redirect
 from db_functions import *
 from user import User
 
-app = Flask(__name__, static_folder='./build')
+app = Flask(__name__, static_folder='./build', static_url_path='/',)
 #CORS(app)
 
 
@@ -34,9 +34,13 @@ except:
     print("Failed to connect to database")
 
 
-@app.route("/", defaults={'path':''})
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
 def serve(path):
-    return app.send_static_file('index.html')
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 
 @app.route("/register", methods=["POST"])
