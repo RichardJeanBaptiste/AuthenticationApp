@@ -13,6 +13,8 @@ from user import User
 app = Flask(__name__, static_folder='./build', static_url_path='/',)
 #CORS(app)
 
+
+
 app.secret_key = "ajs76agwgfa7fha6fg7a6f671ga7"
 
 GOOGLE_CLIENT_ID = os.environ.get("1097732373698-72rm00sovc1v5fhga05p9s2cc8tvbrru.apps.googleusercontent.com", None)
@@ -32,7 +34,7 @@ except:
     print("Failed to connect to database")
 
 
-@app.route("/", defaults={'path':''})
+@app.route("/")
 def serve(path):
     return app.send_static_file('index.html')
 
@@ -142,7 +144,6 @@ def logout_user():
     
     
 
-'''
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=False, port=os.environ.get('PORT',80))
-'''
+    app.run(debug=False)
