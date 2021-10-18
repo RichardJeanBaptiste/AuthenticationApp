@@ -10,7 +10,7 @@ from werkzeug.utils import redirect
 from db_functions import *
 from user import User
 
-app = Flask(__name__, static_folder='./build', static_url_path='/')
+app = Flask(__name__, static_folder='./build', static_url_path='/',)
 #CORS(app)
 
 app.secret_key = "ajs76agwgfa7fha6fg7a6f671ga7"
