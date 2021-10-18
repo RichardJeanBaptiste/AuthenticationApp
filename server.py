@@ -17,14 +17,14 @@ app = Flask(__name__, static_folder='./build', static_url_path='/',)
 
 app.secret_key = "ajs76agwgfa7fha6fg7a6f671ga7"
 
-GOOGLE_CLIENT_ID = os.environ.get("1097732373698-72rm00sovc1v5fhga05p9s2cc8tvbrru.apps.googleusercontent.com", None)
-GOOGLE_CLIENT_SECRET = os.environ.get("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", None)
-GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/o/oauth2/auth")
+#GOOGLE_CLIENT_ID = os.environ.get("1097732373698-72rm00sovc1v5fhga05p9s2cc8tvbrru.apps.googleusercontent.com", None)
+#GOOGLE_CLIENT_SECRET = os.environ.get("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", None)
+#GOOGLE_DISCOVERY_URL = ("https://accounts.google.com/o/oauth2/auth")
 
-login_manager = LoginManager()
-login_manager.init_app(app)
+#login_manager = LoginManager()
+#login_manager.init_app(app)
 
-client = WebApplicationClient(GOOGLE_CLIENT_ID)
+#client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 try:
     client = MongoClient("mongodb+srv://Richinbk:RichinbkAuth123@users.mhqvf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
@@ -34,7 +34,7 @@ except:
     print("Failed to connect to database")
 
 
-@app.route("/")
+@app.route("/", defaults={'path':''})
 def serve(path):
     return app.send_static_file('index.html')
 
