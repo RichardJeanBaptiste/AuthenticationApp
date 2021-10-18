@@ -54,7 +54,7 @@ export default function Login() {
     
      let googleLoginResponse = response.profileObj;
      
-     fetch('/google-login', {
+     fetch('https://richinbkauthapp.herokuapp.com/google-login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -108,7 +108,7 @@ export default function Login() {
 
                 }}>Login</Typography>
 
-                <form action="/userlogin" method="POST">
+                <form action="https://richinbkauthapp.herokuapp.com/userlogin" method="POST">
 
                 <TextField 
                   variant='outlined' 

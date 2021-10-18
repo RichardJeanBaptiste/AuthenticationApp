@@ -42,7 +42,7 @@ export default function Register() {
     
     let googleLoginResponse = response.profileObj;
 
-    fetch('/register_google', {
+    fetch('https://richinbkauthapp.herokuapp.com/register_google', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

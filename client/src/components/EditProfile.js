@@ -129,7 +129,7 @@ export default function EditProfile(props){
             'password': newPassword === "" ? UserData.password : newPassword,
         }
 
-        fetch('/edit_user', {
+        fetch('https://richinbkauthapp.herokuapp.com/edit_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
