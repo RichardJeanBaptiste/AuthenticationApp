@@ -24,7 +24,7 @@ export default function DropDownMenu() {
     }
 
     function LogoutUser() {
-        fetch('/logout',{
+        fetch('https://richinbkauthapp.herokuapp.com/logout',{
             method: 'POST'
         }).then(()=> {
             history.push("/login")

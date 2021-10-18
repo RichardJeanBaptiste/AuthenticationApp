@@ -1,6 +1,7 @@
 import random
 import os
 from flask import Flask, request, session, redirect, send_from_directory
+from flask_cors import CORS
 from oauthlib.oauth2 import WebApplicationClient
 from pymongo import MongoClient
 from werkzeug.utils import redirect
@@ -8,7 +9,7 @@ from db_functions import *
 from user import User
 
 app = Flask(__name__, static_folder='./build', static_url_path='/',)
-#CORS(app)
+CORS(app)
 
 
 
@@ -34,7 +35,7 @@ except:
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file("index.html")
-    
+
 @app.route('/')
 def index():
     return app.send_static_file("index.html")
