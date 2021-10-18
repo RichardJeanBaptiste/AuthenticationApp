@@ -32,7 +32,7 @@ except:
 
 
 @app.route('/', defaults={'path': ''})
-def index():
+def index(path):
     return app.send_static_file('index.html')
 
 
