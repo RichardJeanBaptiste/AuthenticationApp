@@ -54,7 +54,7 @@ def register():
     else:
         return 'User Exists'
 
-@app.route("/login", methods=['GET','POST'])
+@app.route("/userlogin", methods=['GET','POST'])
 def login():
     x = {
         'email': request.form['email'].lower(),
