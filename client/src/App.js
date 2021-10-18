@@ -4,7 +4,6 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Profile from './components/Profile';
 import EditProfile from './components/EditProfile';
-import Test1 from './components/Test1';
 
 
 
@@ -14,11 +13,8 @@ function App() {
   return (
       <Router>
         <Switch>
-          <Route exact path="/register">
-            <Register/>
-          </Route>
           <Route exact path="/">
-              <Test1/>
+            <Register/>
           </Route>
           <Route path="/login">
             <Login/>

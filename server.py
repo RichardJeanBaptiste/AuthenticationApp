@@ -31,9 +31,13 @@ except:
     print("Failed to connect to database")
 
 
-@app.route('/', defaults={'path': ''})
-def index(path):
-    return app.send_static_file('index.html')
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file("index.html")
+    
+@app.route('/')
+def index():
+    return app.send_static_file("index.html")
 
 
 @app.route("/register", methods=["POST"])
@@ -140,5 +144,7 @@ def logout_user():
     return redirect("https://richinbkauthapp.herokuapp.com/login")
     
     
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
