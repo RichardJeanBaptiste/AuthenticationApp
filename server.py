@@ -75,7 +75,6 @@ def login():
 @app.route("/register_google", methods=['POST'])
 def google_register():
 
-    
     x = {
         'user_id': request.json['googleId'],
         'email': request.json['email'],
@@ -141,11 +140,12 @@ def edit_user():
 
 @app.route("/logout", methods=['GET','POST'])
 def logout_user():
+    print("logout user")
     session.pop('id', None)
     return redirect("https://richinbkauthapp.herokuapp.com/login")
     
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
 
 

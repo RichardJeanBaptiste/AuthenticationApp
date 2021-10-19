@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Divider  } from '@mui/material'
+import { Box, Menu, MenuItem, IconButton, ListItemIcon, ListItemText, Divider  } from '@mui/material'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupIcon from '@mui/icons-material/Group';
@@ -28,6 +28,8 @@ export default function DropDownMenu() {
             method: 'POST'
         }).then(()=> {
             history.push("/login")
+        }).catch((error) => {
+            console.log(error)
         })
     }
 
@@ -68,10 +70,12 @@ export default function DropDownMenu() {
                 <Divider/>
 
                 <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <LogoutIcon sx={{ color: '#EB5757'}}/>
-                    </ListItemIcon>
-                    <ListItemText sx={{ color: '#EB5757' }} onClick={LogoutUser}>Logout</ListItemText>
+                    <Box onClick={LogoutUser}>
+                        <ListItemIcon>
+                            <LogoutIcon sx={{ color: '#EB5757'}}/>
+                        </ListItemIcon>
+                        <ListItemText sx={{ color: '#EB5757' }} >Logout</ListItemText>
+                    </Box>
                 </MenuItem>
             </Menu>
 
