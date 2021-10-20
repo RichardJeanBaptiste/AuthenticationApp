@@ -38,7 +38,9 @@ export default function Register() {
   }
 
   const successRegister = (response) => {
-    
+
+    alert('register client side')
+    /*
     let googleLoginResponse = response.profileObj;
 
     alert('register goolge route')
@@ -59,7 +61,7 @@ export default function Register() {
         history.push('/login')
       }
     })
-
+    */
   } 
 
  
