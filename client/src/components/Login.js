@@ -64,7 +64,7 @@ export default function Login() {
     .then((response) => response.text())
     .then((data) => {
       if(data === "Exists"){
-          history.push(`https://richinbkauthapp.herokuapp.com/profile/${googleLoginResponse.googleId}`)
+          history.push(`/profile/${googleLoginResponse.googleId}`)
       }else{
         alert(" account doesn't exist")
         history.push("/")
