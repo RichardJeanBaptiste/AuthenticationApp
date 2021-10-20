@@ -9,7 +9,7 @@ from db_functions import *
 from user import User
 
 app = Flask(__name__, static_folder='./build', static_url_path='/',)
-CORS(app)
+#CORS(app)
 
 
 

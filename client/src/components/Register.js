@@ -39,8 +39,6 @@ export default function Register() {
 
   const successRegister = (response) => {
 
-    alert('register client side')
-    /*
     let googleLoginResponse = response.profileObj;
 
     alert('register goolge route')
@@ -61,7 +59,6 @@ export default function Register() {
         history.push('/login')
       }
     })
-    */
   } 
 
  
@@ -176,7 +173,7 @@ export default function Register() {
                           )}
                           onSuccess={successRegister}
                           onFailure={responseGoogle}
-                          cookiePolicy={'single_host_origin'}
+                          ///cookiePolicy={'single_host_origin'}
                     />
                 </Box>
 
