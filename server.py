@@ -75,6 +75,9 @@ def login():
 @app.route("/register_google", methods=['POST'])
 def google_register():
 
+   
+
+
     x = {
         'user_id': request.json['googleId'],
         'email': request.json['email'],
@@ -84,7 +87,10 @@ def google_register():
         'phone': '',
         'password': '*',
     }
+
+    print('register Route'.center(30,'='))
     if(User.create(x) == True):
+        print('User Created'.center(30, '='))
         return "User Created"
     else:
         return 'User Exists'
