@@ -54,7 +54,7 @@ def register():
         'phone': ''
     }
     if(User.create(x) == True):
-        return redirect('https://richinbkauthapp.herokuapp.com/login')
+        return 'User Created'
     else:
         return 'User Exists'
 

@@ -33,7 +33,7 @@ export default function Register() {
   // Google login callback
 
   const responseGoogle = (response) => {
-      alert('Failed')
+      //alert('Failed')
       console.log(response)
   }
 
@@ -41,7 +41,6 @@ export default function Register() {
 
     let googleLoginResponse = response.profileObj;
 
-    alert('register goolge route')
     fetch('https://richinbkauthapp.herokuapp.com/register_google', {
       method: 'POST',
       headers: {
