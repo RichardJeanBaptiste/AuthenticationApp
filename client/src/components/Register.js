@@ -33,9 +33,8 @@ export default function Register() {
   // Google login callback
 
   const responseGoogle = (response) => {
-    //console.log("abcdedfas")
-    //console.log(response);
-    //console.log(response.profileObj);
+      alert('Failed')
+      console.log(response)
   }
 
   const successRegister = (response) => {

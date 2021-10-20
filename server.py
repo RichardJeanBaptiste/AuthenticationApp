@@ -91,6 +91,11 @@ def google_register():
         return "User Created"
     else:
         return 'User Exists'
+
+@app.route("/test", methods=['POST'])
+def test():
+    print('test route')
+    return 'User Creatd'
     
 
 @app.route("/google-login", methods=["POST"])
