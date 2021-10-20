@@ -42,6 +42,7 @@ class User(UserMixin):
         a = profiles.find_one({'email': data['email']})
         if(str(a) == 'None'):
             profiles.insert_one(data)
+            print('create method')
             return True
         else:
             return False
